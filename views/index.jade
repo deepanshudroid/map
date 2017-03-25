@@ -61,36 +61,9 @@ block content
 
 		p(data-bind="text: website")   
 	
-	// Here is a block to display from Wiki Api
-	#wikipedia-container(data-bind="visible: wikiHeader")
-		button(data-bind="click: sortItems") Sort
-
-		h3 Useful Wiki Links
-
-		span(data-bind="text: wikiError")
-	
-		ul(data-bind="foreach: wikiArray")
-			li
-				a(data-bind="attr: {href:url}, text: article")
-	
 	// Mobile list of results, mobile navigation buttons, hidden until media query is activated
 	.mobilewrapper(data-bind="visible: mobblock")
 		.mobilebutton(data-bind="click: mobileToggleMusList")
-
-	.mobilewrapperwiki(data-bind="visible: mobblock")
-		.mobilebuttonwiki(data-bind="click: mobileToggleList")
-
-	.mobileresults(data-bind="visible: mobileShow() === true")
-		div(data-bind="visible: wikiHeader")
-			button(data-bind="click: sortItems") Sort
-
-			h3 Useful Wiki Links
-
-			span(data-bind="text: wikiError")
-
-			ul(data-bind="foreach: wikiArray")
-				li
-					a(data-bind="attr: {href:url}, text: article")
 
 	.mobmuseumresults(data-bind="visible: mobileMusShow() === true")
 		ul(data-bind="foreach: museumResults")

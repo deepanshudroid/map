@@ -5,14 +5,10 @@
 var map, places, infoWindow;
 var markers = [];
 var autocomplete;
-var countryRestrict = { 'country': 'us' };
+var countryRestrict = { 'country': 'in' };
 var MARKER_PATH = 'https://maps.gstatic.com/intl/en_us/mapfiles/marker_green';
 var hostnameRegexp = new RegExp('^https?://.+?/');
 var viewModel = {
-    wikiArray: ko.observableArray(), //this array holds data from ajax request from wiki api
-    wikiError: ko.observable(""),
-    wikiHeader: ko.observable(false),
-    buttonWiki: ko.observable(false),
     infoWindowcontent: ko.observable(false), //this block holds info about museums when window opens on a click
     infoPlaces: ko.observableArray(), //this array holds all museums in a given location
     name: ko.observable(), //name of the museum
@@ -24,13 +20,6 @@ var viewModel = {
     mobileMusShow: ko.observable(false),
     mobblock: ko.observable(false),
     museumResults: ko.observableArray(), //holds array of museum results
-    
-    // just using sorting function to sort array of wiki articles
-    sortItems: function() {
-        this.wikiArray.sort(function(left, right) {
-            return left.article == right.article ?0: (left.aricle < right.articel ? -1:1);
-        });
-    },
 
     mobileToggleList: function() {
         if(viewModel.mobileShow() === false) {
@@ -48,20 +37,17 @@ var viewModel = {
         }
     },
 
-     // When a museum on the list is clicked, go to corresponding marker and open its info window; on mobile and tablets.
+    // When a museum on the list is clicked, go to corresponding marker and open its info window; on mobile and tablets.
     goToMarker: function(clickedMus) {
         var clickedMusName = clickedMus.name;
         for(var key in viewModel.museumResults()) {
             if(clickedMusName === viewModel.museumResults()[key].name) {
-            map.panTo(viewModel.museumResults()[key].position);
-            map.setZoom(14);
-            map.panBy(0, -150);
-            //infoWindow.setContent(viewModel.museumResults()[key].content);
-            //infoWindow.open(map, viewModel.museumResults()[key].marker);
-            viewModel.mobileMusShow(false);
-            google.maps.event.trigger(viewModel.museumResults()[key].marker, 'click', showInfoWindow);
+                map.panTo(viewModel.museumResults()[key].position);
+                map.setZoom(14);
+                map.panBy(0, -150);
+                viewModel.mobileMusShow(false);
+                google.maps.event.trigger(viewModel.museumResults()[key].marker, 'click', showInfoWindow);
             }
-        
         }
     }
 };
@@ -131,10 +117,10 @@ var countries = {
 };
 
 //Initialize google map on load
-$(document).ready(function(){
+$(document).ready(function() {
     var myOptions = {
-        zoom: countries['us'].zoom,
-        center: countries['us'].center,
+        zoom: countries['in'].zoom,
+        center: countries['in'].center,
         mapTypeControl: false,
         panControl: false,
         zoomControl: false,
@@ -155,11 +141,10 @@ $(document).ready(function(){
         content: document.getElementById('info-content')
     });
 
-  // Create the autocomplete object and associate it with the UI input control.
-  // Restrict the search to the default country, and to place type "cities".
+    // Create the autocomplete object and associate it with the UI input control.
+    // Restrict the search to the default country, and to place type "cities".
     autocomplete = new google.maps.places.Autocomplete(
-    /** @type {HTMLInputElement} */(document.getElementById('autocomplete')),
-    {
+        (document.getElementById('autocomplete')), {
         types: ['(cities)'],
         componentRestrictions: countryRestrict
     });
@@ -167,9 +152,9 @@ $(document).ready(function(){
 
     google.maps.event.addListener(autocomplete, 'place_changed', onPlaceChanged);
 
-  // Add a DOM event listener to react when the user selects a country.
-    google.maps.event.addDomListener(document.getElementById('country'), 'change',
-        setAutocompleteCountry);
+    // Add a DOM event listener to react when the user selects a country.
+    google.maps.event.addDomListener(document.getElementById('country'), 'change', setAutocompleteCountry);
+
     ko.applyBindings(viewModel);
 });
 
@@ -180,48 +165,22 @@ function onPlaceChanged() {
     if (place.geometry) {
         map.panTo(place.geometry.location);
         map.setZoom(15);
-    search();
-
+        search();
     } else {
         document.getElementById('autocomplete').placeholder = 'Enter a city';
         return;
     }
 
     var cityname = place.address_components[0].long_name;
-    viewModel.wikiHeader(true);
     viewModel.mobblock(true);
-    
-    viewModel.wikiArray.removeAll();
     viewModel.museumResults.removeAll();
-    viewModel.wikiError("");
-
-    // Wikipedia code ajax request
-
-    var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + cityname + '&format=json&callback=wikiCallback';
-    var wikiRequestTimeout = setTimeout(function() {
-        viewModel.wikiError("failed to get Wikipedia resources");
-    },8000);
-    
-    $.ajax({
-        url: wikiUrl,
-        dataType: "jsonp",
-        success: function( response) {
-            var articleList = response[1];
-            articleList.forEach(function(articleStr) {
-                var url = 'http://wikipedia.org/wiki/' + articleStr;
-                viewModel.wikiArray.push({url: url, article: articleStr});
-            });
-
-            clearTimeout(wikiRequestTimeout);
-        }
-    });
 }
 
 // Search for museums in the selected city, within the viewport of the map.
 function search() {
     var search = {
         bounds: map.getBounds(),
-        types: ['museum']
+        types: ['restaurant']
     };
 
     places.nearbySearch(search, function(results, status) {
@@ -229,8 +188,8 @@ function search() {
             clearResults();
             clearMarkers();
 
-        // Create a marker for each museum found, and
-        // assign a letter of the alphabetic to each marker icon.
+            // Create a marker for each museum found, and
+            // assign a letter of the alphabetic to each marker icon.
             for (var i = 0; i < results.length; i++) {
                 var markerLetter = String.fromCharCode('A'.charCodeAt(0) + i);
                 var markerIcon = MARKER_PATH + markerLetter + '.png';
@@ -260,8 +219,7 @@ function search() {
                 google.maps.event.addListener(markers[i], 'click', showInfoWindow);
 
                 setTimeout(dropMarker(i), i * 100);
-                addResult(results[i], i);                
-                
+                addResult(results[i], i);
             }
         }
     });
@@ -303,7 +261,6 @@ function dropMarker(i) {
 }
 
 function addResult(result, i) {
-    
     var results = document.getElementById('results');
     var markerLetter = String.fromCharCode('A'.charCodeAt(0) + i);
     var markerIcon = MARKER_PATH + markerLetter + '.png';
@@ -313,7 +270,6 @@ function addResult(result, i) {
     tr.onclick = function() {
         google.maps.event.trigger(markers[i], 'click');
     };
-  
 
     var iconTd = document.createElement('td');
     var nameTd = document.createElement('td');
@@ -329,14 +285,12 @@ function addResult(result, i) {
     results.appendChild(tr);
 }
 
-
 function clearResults() {
     var results = document.getElementById('results');
     while (results.childNodes[0]) {
         results.removeChild(results.childNodes[0]);
     }
 }
-
 
 // Get the place details for a museum. Show the information in an info window,
 // anchored on the marker for the museum that the user selected.
