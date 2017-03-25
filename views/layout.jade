@@ -1,10 +1,18 @@
 doctype html
 html
   head
+    meta(name="description", content="Google map with search capabilities to find museums in every city and plan your visit")
+    meta(name="viewport", content="width=device-width, initial-scale=1, user-scalable=no")
+    meta(charset="utf-8")
+
     title= title
+    
+    link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Roboto', type='text/css')
     link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', href='/stylesheets/responsive.css')
-  body
+
+    script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDb_CzjwOth1LeVqDaRF0LwJRZyzoQo_aQ&libraries=places')
+    script(src='/javascripts/knockout-3.4.2.js')
+    script(src='/javascripts/jquery-3.2.0.min.js')
+    script(src='/javascripts/main.js')
   body
     block content

@@ -2,15 +2,103 @@ extends layout
 
 block content
 
-	script(src='http://code.jquery.com/jquery-1.11.2.min.js')
-	script(src='http://maps.google.com/maps/api/js?sensor=true')
-	script(src='/javascripts/main.js')
-	script(src='/javascripts/flickr.js')
-	script(src='/javascripts/knockout-3.3.0.js')
+	.wrapper
+		#findmuseums
+			Find museums in:
 
-		p Loading your location
+	#locationField
+		input#autocomplete(placeholder="Enter a city", type="text")
+
+	#controls
+		select#country
+			option(value="all") All
+
+			option(value="au") Australia
+
+			option(value="br") Brazil
+
+			option(value="ca") Canada
+
+			option(value="fr") France
+
+			option(value="de") Germany
+
+			option(value="in", selected="") India
+
+			option(value="mx") Mexico
+
+			option(value="nz") New Zealand
+
+			option(value="it") Italy
+
+			option(value="za") South Africa
+
+			option(value="es") Spain
+
+			option(value="pt") Portugal
+
+			option(value="us") U.S.A.
+
+			option(value="uk") United Kingdom
+
+	#map-canvas
+
+	#listing
+		table#resultsTable
+			tbody#results
+
+	// display info in the popup window of every marker!
+	#info-content(data-bind="visible: infoWindowcontent")
+		ul(data-bind="foreach: infoPlaces")  
+
+		img(width="20", height="20", src="", alt="museum icon", data-bind="attr: {src: icon}")
+
+		h3(data-bind="text: name")   
+
+		p(data-bind="text: phone")  
+
+		p(data-bind="text: adress")   
+
+		p(data-bind="text: website")   
 	
-	br
+	// Here is a block to display from Wiki Api
+	#wikipedia-container(data-bind="visible: wikiHeader")
+		button(data-bind="click: sortItems") Sort
+
+		h3 Useful Wiki Links
+
+		span(data-bind="text: wikiError")
 	
-	#map
+		ul(data-bind="foreach: wikiArray")
+			li
+				a(data-bind="attr: {href:url}, text: article")
+	
+	// Mobile list of results, mobile navigation buttons, hidden until media query is activated
+	.mobilewrapper(data-bind="visible: mobblock")
+		.mobilebutton(data-bind="click: mobileToggleMusList")
+
+	.mobilewrapperwiki(data-bind="visible: mobblock")
+		.mobilebuttonwiki(data-bind="click: mobileToggleList")
+
+	.mobileresults(data-bind="visible: mobileShow() === true")
+		div(data-bind="visible: wikiHeader")
+			button(data-bind="click: sortItems") Sort
+
+			h3 Useful Wiki Links
+
+			span(data-bind="text: wikiError")
+
+			ul(data-bind="foreach: wikiArray")
+				li
+					a(data-bind="attr: {href:url}, text: article")
+
+	.mobmuseumresults(data-bind="visible: mobileMusShow() === true")
+		ul(data-bind="foreach: museumResults")
+			div(data-bind="click: $parent.goToMarker")
+				img(style="cursor:pointer", src="", alt="marker", data-bind="attr: {src: markerPic}")
+
+				li(data-bind="text: name")
+
+
+
 
