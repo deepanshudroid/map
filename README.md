@@ -3,7 +3,7 @@ Find restaurents in different cities and countries and see which one you have no
 
 In my project I have chosen Google Map Api. It's one page app that uses knockout.js binding, jQuery, node Js and Express Js.
 
-You can see the demo here: http://museum.oxanaweb.com/
+You can see the demo here: [https://neighbourhood-map.herokuapp.com/](https://neighbourhood-map.herokuapp.com/)
 
 # Tasks
 
