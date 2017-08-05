@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="description" content="Google map with search capabilities to find museums in every city and plan your visit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto" type="text/css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5gSOScPvSCrPssIez0VRSPXHfDsH7bUY&amp;libraries=places"></script>
+    <script src="/javascripts/knockout-3.4.2.js"></script>
+    <script src="/javascripts/jquery-3.2.0.min.js"></script>
+    <script src="/javascripts/main.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div id="findmuseums">
+        <Find>museums in:</Find>
+      </div>
+    </div>
+    <div id="locationField">
+      <input id="autocomplete" placeholder="Enter a city" type="text"/>
+    </div>
+    <div id="controls">
+      <select id="country">
+        <option value="all">All</option>
+        <option value="au">Australia</option>
+        <option value="br">Brazil</option>
+        <option value="ca">Canada</option>
+        <option value="fr">France</option>
+        <option value="de">Germany</option>
+        <option value="in" selected="">India</option>
+        <option value="mx">Mexico</option>
+        <option value="nz">New Zealand</option>
+        <option value="it">Italy</option>
+        <option value="za">South Africa</option>
+        <option value="es">Spain</option>
+        <option value="pt">Portugal</option>
+        <option value="us">U.S.A.</option>
+        <option value="uk">United Kingdom</option>
+      </select>
+    </div>
+    <div id="map-canvas"></div>
+    <div id="listing">
+      <table id="resultsTable">
+        <tbody id="results"></tbody>
+      </table>
+    </div>
+    <!-- display info in the popup window of every marker!-->
+    <div id="info-content" data-bind="visible: infoWindowcontent">
+      <ul data-bind="foreach: infoPlaces"> </ul><img width="20" height="20" src="" alt="museum icon" data-bind="attr: {src: icon}"/>
+      <h3 data-bind="text: name">  </h3>
+      <p data-bind="text: phone"> </p>
+      <p data-bind="text: adress">  </p>
+      <p data-bind="text: website">  </p>
+    </div>
+    <!-- Mobile list of results, mobile navigation buttons, hidden until media query is activated-->
+    <div class="mobilewrapper" data-bind="visible: mobblock">
+      <div class="mobilebutton" data-bind="click: mobileToggleMusList"></div>
+    </div>
+    <div class="mobmuseumresults" data-bind="visible: mobileMusShow() === true">
+      <ul data-bind="foreach: museumResults">
+        <div data-bind="click: $parent.goToMarker"><img style="cursor:pointer" src="" alt="marker" data-bind="attr: {src: markerPic}"/>
+          <li data-bind="text: name"></li>
+        </div>
+      </ul>
+    </div>
+  </body>
+</html>
