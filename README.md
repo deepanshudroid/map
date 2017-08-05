@@ -9,10 +9,7 @@ You can see the demo here: [https://neighbourhood-map.herokuapp.com/](https://ne
 
 1. Clone the project 
 - 'git clone https://github.com/sinhaDroid/neighbourhood-map.git'
-2. Install the node and run npm
-- 'npm install'
-3. Start the node Server
-- 'npm start'
+2. Open index.html file
 
 # Resources
 To build this project I used several sources:
