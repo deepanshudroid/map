@@ -266,7 +266,7 @@ function addResult(result, i) {
     var markerIcon = MARKER_PATH + markerLetter + '.png';
 
     var tr = document.createElement('tr');
-    tr.style.backgroundColor = (i % 2 == 0 ? 'rgba(31,81,22,0.8)' : 'rgba(114,93,6,0.8)');
+    tr.style.backgroundColor = (i % 2 === 0 ? 'rgba(31,81,22,0.8)' : 'rgba(114,93,6,0.8)');
     tr.onclick = function() {
         google.maps.event.trigger(markers[i], 'click');
     };
@@ -315,14 +315,14 @@ function showInfoWindow() {
 function buildIWContent(data) {
     viewModel.name(data.name);
     viewModel.phone('Phone: ' + data.formatted_phone_number);
-    if(data.formatted_phone_number == null) {
+    if(data.formatted_phone_number === null) {
         viewModel.phone("");
     }
 
     viewModel.adress('Address: ' + data.vicinity);
 
     viewModel.website('Website: ' + data.website);
-    if(data.website == null) {
+    if(data.website === null) {
         viewModel.website("");
     }
 
